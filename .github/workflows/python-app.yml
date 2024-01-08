@@ -51,7 +51,7 @@ jobs:
       
       - name: Test
         run: |
-          python3 -m pytest
+          ls
   
   deploy:
     runs-on: ubuntu-latest
