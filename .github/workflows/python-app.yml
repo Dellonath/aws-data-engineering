@@ -14,65 +14,33 @@ permissions:
 
 jobs:
   build:
-
-    runs-on: ubuntu-latest
-
-    steps:
-
-    # Create variables according to the branch
-    - name: Set env to development
-      if: endsWith(github.ref, '/develop')
-      run: |
-        echo "ENVIRONMENT=dev" >> $GITHUB_ENV
-        echo "ACCOUNT_ID='339712827658'" >> $GITHUB_ENV
-    - name: Set env to production
-      if: endsWith(github.ref, '/master')
-      run: |
-       echo "ENVIRONMENT=prod" >> $GITHUB_ENV
-       echo "ACCOUNT_ID='975050223655'" >> $GITHUB_ENV
-
-    - uses: actions/checkout@v3
-    - name: Set up Python 3.10
-      uses: actions/setup-python@v3
-      with:
-        python-version: "3.10"
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install pytest
-        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-        if [ -f requirements-dev.txt ]; then pip install -r requirements-dev.txt; fi
-
-  test: 
-    
-    runs-on: ubuntu-latest
-
-    steps:
-      
-      - name: Test
-        run: |
-          python3 -m pytest
-  
-  deploy:
     runs-on: ubuntu-latest
     steps:
-
-      - name: cdk and cli build
-
-        uses: unfor19/install-aws-cli-action@v1
+      - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
+      - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
+      - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
+      - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
+      - uses: actions/checkout@v3
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v4
         with:
-          version: 2                         # default
-          verbose: false                     # default
-          arch: amd64                        # allowed values: amd64, arm64
-        
-      
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: 'us-east-1'
-          
-      - name: run deploy
+          python-version: "3.9"
+      - name: Set up Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: "16"
+      - name: Install Python dependencies and CDK
         run: |
-         cdk deploy
-    
-    
+          python -m pip install --upgrade pip
+          # install your Python dependencies here
+          npm install -g aws-cdk
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@master
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+          aws-region: "us-east-1"
+      - name: Deploy to AWS
+        run: cdk deploy --app="python3 ${PWD}/cdk/my_service/app.py" --require-approval=never
+      - name: Destroy stack
+        run: cdk destroy --app="python3 ${PWD}/cdk/my_service/app.py" --force
