@@ -52,6 +52,7 @@ jobs:
       - name: Test
         run: |
           ls
+          pwd
   
   deploy:
     runs-on: ubuntu-latest
