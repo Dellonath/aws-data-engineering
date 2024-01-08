@@ -71,5 +71,5 @@ jobs:
           AWS_DEFAULT_REGION: 'us-east-1'
         
           run: |
-            cdk diff
+            cdk deploy
     
