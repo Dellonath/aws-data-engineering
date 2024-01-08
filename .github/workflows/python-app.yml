@@ -10,6 +10,7 @@ on:
     branches: [ "develop" , "master" ]
 
 permissions:
+  id-token: write
   contents: read
 
 jobs:
@@ -60,7 +61,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v2
+        uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -83,4 +84,3 @@ jobs:
       - name: CDK Deploy
         run: cdk deploy
         working-directory: CDK-AWS
-
