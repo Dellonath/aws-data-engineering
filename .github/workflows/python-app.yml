@@ -9,6 +9,11 @@ on:
   pull_request:
     branches: [ "develop" , "master" ]
 
+  workflow_call:
+    inputs:
+      AWS_ACCESS_KEY_ID: { required: true, type: string }
+      AWS_SECRET_ACCESS_KEY: { required: true, type: string }
+
 permissions:
   id-token: write
   contents: read
