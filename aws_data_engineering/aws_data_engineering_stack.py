@@ -4,7 +4,7 @@ from aws_cdk import (
     # aws_sqs as sqs,
     aws_s3 as s3
 )
-import os
+
 from constructs import Construct
 from stack_configuration import CloudFormationStackConfiguration
 

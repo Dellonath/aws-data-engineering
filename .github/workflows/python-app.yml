@@ -3,6 +3,9 @@ name: AWS Data Engineering
 
 on:
 
+  push:
+    branches: [ "develop" , "master" ]
+
   pull_request:
     branches: [ "develop" , "master" ]
 
