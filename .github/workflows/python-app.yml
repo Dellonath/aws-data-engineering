@@ -63,7 +63,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
-          python-version: '3.1'  # Specify your desired Python version
+          python-version: '3.13'  # Specify your desired Python version
 
       - name: Install AWS CLI and CDK
         run: |
@@ -78,5 +78,5 @@ jobs:
 
       - name: CDK Deploy
         run: |
-          cd path/to/your/cdk/app  # Change this to the directory containing your CDK app
+          cd app.py  # Change this to the directory containing your CDK app
           cdk deploy --require-approval never
