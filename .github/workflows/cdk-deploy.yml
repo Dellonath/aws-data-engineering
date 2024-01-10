@@ -31,21 +31,16 @@ jobs:
       - name: checkout repository
         uses: actions/checkout@v3
 
-      # - name: cdk diff dev
-      #   if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
-      #   uses: youyo/aws-cdk-github-actions@v2
-      #   with:
-      #     cdk_subcommand: 'diff'
-      #     actions_comment: false
-      #   env:
-      #     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID_DEV }}
-      #     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_DEV }}
-      #     AWS_DEFAULT_REGION: 'us-east-1'
-      
-      - name: bootstrap dev
+      - name: cdk diff dev
         if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
-        run: |
-          cdk bootstrap 
+        uses: youyo/aws-cdk-github-actions@v2
+        with:
+          cdk_subcommand: 'diff'
+          actions_comment: false
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID_DEV }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_DEV }}
+          AWS_DEFAULT_REGION: 'us-east-1'
       
       - name: cdk deploy dev
         if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
@@ -66,21 +61,16 @@ jobs:
           echo "ENVIRONMENT=prod" >> $GITHUB_ENV
           echo "AWS_ACCOUNT_ID=${{ secrets.AWS_ACCOUNT_ID_PROD }}" >> $GITHUB_ENV
       
-      # - name: cdk diff prod
-      #   if: github.event_name == 'push' && github.ref == 'refs/heads/master'
-      #   uses: youyo/aws-cdk-github-actions@v2
-      #   with:
-      #     cdk_subcommand: 'diff'
-      #     actions_comment: false
-      #   env:
-      #     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID_PROD }}
-      #     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_PROD }}
-      #     AWS_DEFAULT_REGION: 'us-east-1'
-       
-      # - name: bootstrap prod
-      #   if: github.event_name == 'push' && github.ref == 'refs/heads/master'
-      #   run: |
-      #     cdk bootstrap
+      - name: cdk diff prod
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        uses: youyo/aws-cdk-github-actions@v2
+        with:
+          cdk_subcommand: 'diff'
+          actions_comment: false
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID_PROD }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_PROD }}
+          AWS_DEFAULT_REGION: 'us-east-1'
 
       - name: cdk deploy prod
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
