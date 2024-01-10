@@ -62,13 +62,13 @@ jobs:
         if: endsWith(github.ref, '/develop')
         run: |
          echo "ENVIRONMENT=dev" >> $GITHUB_ENV
-         echo "ACCOUNT_ID=${{ secrets.AWS_ACCESS_KEY_ID_DEV }}" >> $GITHUB_ENV
+         echo "ACCOUNT_ID=${{ secrets.AWS_ACCOUNT_ID_DEV }}" >> $GITHUB_ENV
 
       - name: Set env to production
         if: endsWith(github.ref, '/master')
         run: |
           echo "ENVIRONMENT=prod" >> $GITHUB_ENV
-          echo "ACCOUNT_ID=${{ secrets.AWS_ACCESS_KEY_ID_PROD }}" >> $GITHUB_ENV
+          echo "ACCOUNT_ID=${{ secrets.AWS_ACCOUNT_ID_PROD }}" >> $GITHUB_ENV
 
       - name: Checkout repository
         uses: actions/checkout@v2
