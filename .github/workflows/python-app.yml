@@ -58,6 +58,12 @@ jobs:
     
     steps:
 
+      - name: Configure AWS Credentials
+        run: |
+          echo "[default]
+          aws_access_key_id=${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_access_key=${{ secrets.AWS_SECRET_ACCESS_KEY }}" > ~/.aws/credentials
+
       - name: Set env to development
         if: endsWith(github.ref, '/develop')
         run: |
