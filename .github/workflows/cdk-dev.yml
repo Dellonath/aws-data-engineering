@@ -4,10 +4,10 @@ name: AWS Data Engineering
 on:
 
   push:
-    branches: [ "develop" , "master" ]
+    branches: [ "develop" ]
 
   pull_request:
-    branches: [ "develop" , "master" ]
+    branches: [ "develop" ]
 
 permissions:
   contents: read

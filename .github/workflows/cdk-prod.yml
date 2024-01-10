@@ -4,10 +4,10 @@ name: AWS Data Engineering
 on:
 
   push:
-    branches: [ "develop" , "master" ]
+    branches: [ "master" ]
 
   pull_request:
-    branches: [ "develop" , "master" ]
+    branches: [ "master" ]
 
 permissions:
   contents: read
@@ -53,6 +53,7 @@ jobs:
   #       run: |
   #         python3 -m pytest
   # 
+
   aws_cdk:
     runs-on: ubuntu-latest
     
@@ -63,9 +64,12 @@ jobs:
         if: endsWith(github.ref, '/master')
         run: |
           echo "ENVIRONMENT=prod" >> $GITHUB_ENV
+    
 
     steps:
       
+      
+
       - name: Set env to development
         if: endsWith(github.ref, '/develop')
         run: |
