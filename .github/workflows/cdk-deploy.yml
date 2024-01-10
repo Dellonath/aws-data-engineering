@@ -77,10 +77,10 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_PROD }}
           AWS_DEFAULT_REGION: 'us-east-1'
       
-      - name: bootstrap prod
-        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
-        run: |
-          cdk bootstrap
+      # - name: bootstrap prod
+      #   if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+      #   run: |
+      #     cdk bootstrap
 
       - name: cdk deploy prod
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
