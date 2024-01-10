@@ -22,7 +22,7 @@ jobs:
 
       # DEVELOPMENT DEPLOYMENT
 
-      - name: set env to development
+      - name: set envs to development
         if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
         run: |
           echo "ENVIRONMENT=dev" >> $GITHUB_ENV
@@ -55,7 +55,7 @@ jobs:
       
       # PRODUTION DEPLOYMENT
 
-      - name: set env to production
+      - name: set envs to production
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
         run: |
           echo "ENVIRONMENT=prod" >> $GITHUB_ENV
