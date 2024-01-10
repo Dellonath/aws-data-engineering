@@ -63,12 +63,14 @@ jobs:
         run: |
          echo "ENVIRONMENT=dev" >> $GITHUB_ENV
          echo "ACCOUNT_ID=339712827658" >> $GITHUB_ENV
+         echo "AWS_PROFILE=sandbox" >> $GITHUB_ENV 
 
       - name: Set env to production
         if: endsWith(github.ref, '/master')
         run: |
           echo "ENVIRONMENT=prod" >> $GITHUB_ENV
           echo "ACCOUNT_ID=975050223655" >> $GITHUB_ENV
+          echo "AWS_PROFILE=sandbox" >> $GITHUB_ENV 
 
       - name: Checkout repository
         uses: actions/checkout@v2
