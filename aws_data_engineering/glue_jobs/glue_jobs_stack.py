@@ -17,20 +17,20 @@ class DellotechGlueJobsDatalakeStack(Stack):
         super().__init__(scope, construct_id, **kwargs)
                 
         # GLUE JOBS ROLE
-        self.glue_jobs_role = iam.Role(self, 'dello-datalake-glue-jobs-role',
+        self.glue_jobs_role = iam.Role(self, 'DelloDatalakeGlueJobsRole',
             role_name = stack_configuration.glue_jobs_role_name,                           
             assumed_by = iam.ServicePrincipal('glue.amazonaws.com'),
             description = 'Role to be attached to Glue Jobs to read data from s3'
         )
 
         # RAW-TO-TRUSTED
-        self.raw_to_trusted_job = glue.CfnJob(self, 'dello-datalake-glue-job-raw-to-trusted',
+        self.raw_to_trusted_job = glue.CfnJob(self, 'DelloDatalakeGlueJobRawToTrusted',
             name = stack_configuration.raw_to_trusted_job_name,
             description = 'Job resposible for process data from Raw Zone and send it to Trusted Zone',
             max_retries = 3,
-            glue_version = 'V3_0',
+            glue_version = '3.0',
             command = glue.CfnJob.JobCommandProperty(
-                python_version = '3.9.6',
+                python_version = '3.9',
                 script_location = os.path.join(os.getcwd(), 'scripts/raw-to-trusted.py')
             ),
             tags = stack_configuration.jobs_tags,
@@ -38,13 +38,13 @@ class DellotechGlueJobsDatalakeStack(Stack):
         )
         
         # TRUSTED-TO-REFINED
-        self.raw_to_trusted_job = glue.CfnJob(self, 'dello-datalake-glue-job-trusted-to-refined',
+        self.raw_to_trusted_job = glue.CfnJob(self, 'DelloDatalakeGlueJobRawToRefine',
             name = stack_configuration.trusted_to_refined_job_name,
             description = 'Job resposible for process data from Trusted Zone and send it to Refined Zone',
             max_retries = 3,
-            glue_version = 'V3_0',
+            glue_version = '3.9',
             command = glue.CfnJob.JobCommandProperty(
-                python_version = '3.9.6',
+                python_version = '3',
                 script_location = os.path.join(os.getcwd(), 'scripts/trusted-to-refined.py')
             ),
             tags = stack_configuration.jobs_tags,

@@ -1,4 +1,3 @@
-import os
 from aws_data_engineering import DelloDatalakeCommonStackConfiguration
 
 class DelloDatalakeGlueJobsStackConfiguration(DelloDatalakeCommonStackConfiguration):
