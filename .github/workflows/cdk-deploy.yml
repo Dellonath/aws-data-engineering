@@ -9,7 +9,6 @@ on:
     branches:
       - master
       - develop
-
   pull_request:
     branches:
       - master
@@ -28,69 +27,38 @@ jobs:
       AWS_DEFAULT_REGION: 'us-east-1'
 
     steps:
-
-      # DEVELOPMENT DEPLOYMENT
-
-      - name: set envs to development
-        if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
+      - name: set environment variables
         run: |
-          echo "ENVIRONMENT=dev" >> $GITHUB_ENV
-          echo "AWS_ACCOUNT_ID=${{ secrets.AWS_ACCOUNT_ID_DEV }}" >> $GITHUB_ENV
+          if [ "${{ github.event_name }}" == 'push' ]; then
+            if [ "${{ github.ref }}" == 'refs/heads/develop' ]; then
+              echo "ENVIRONMENT=dev" >> $GITHUB_ENV
+              echo "AWS_ACCOUNT_ID=${{ secrets.AWS_ACCOUNT_ID_DEV }}" >> $GITHUB_ENV
+            elif [ "${{ github.ref }}" == 'refs/heads/master' ]; then
+              echo "ENVIRONMENT=prod" >> $GITHUB_ENV
+              echo "AWS_ACCOUNT_ID=${{ secrets.AWS_ACCOUNT_ID_DEV }}" >> $GITHUB_ENV
+            fi
+          fi
 
       - name: checkout repository
         uses: actions/checkout@v3
 
-      - name: cdk diff dev
-        if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
+      - name: cdk diff
         uses: youyo/aws-cdk-github-actions@v2
         with:
           cdk_subcommand: 'diff'
           actions_comment: false
- 
-      - name: cdk deploy dev DellotechBucketsDatalakeStack
-        if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
+
+      - name: cdk deploy DellotechBucketsDatalakeStack
         uses: youyo/aws-cdk-github-actions@v2
         with:
           cdk_subcommand: 'deploy'
           cdk_stack: 'DellotechBucketsDatalakeStack'
           actions_comment: false
 
-      - name: cdk deploy dev DellotechGlueJobsDatalakeStack
-        if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
+      - name: cdk deploy DellotechGlueJobsDatalakeStack
         uses: youyo/aws-cdk-github-actions@v2
         with:
           cdk_subcommand: 'deploy'
           cdk_stack: 'DellotechGlueJobsDatalakeStack'
           cdk_args: '--require-approval never'
           actions_comment: false
-      
-      # PRODUTION DEPLOYMENT
-
-      - name: set envs to production
-        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
-        run: |
-          echo "ENVIRONMENT=prod" >> $GITHUB_ENV
-          echo "AWS_ACCOUNT_ID=${{ secrets.AWS_ACCOUNT_ID_PROD }}" >> $GITHUB_ENV
-      
-      - name: cdk diff prod
-        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
-        uses: youyo/aws-cdk-github-actions@v2
-        with:
-          cdk_subcommand: 'diff'
-          actions_comment: false
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID_PROD }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_PROD }}
-          AWS_DEFAULT_REGION: 'us-east-1'
-
-      - name: cdk deploy prod
-        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
-        uses: youyo/aws-cdk-github-actions@v2
-        with:
-          cdk_subcommand: 'deploy'
-          actions_comment: false
-          cdk_args: '--all --require-approval never'
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID_PROD }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_PROD }}
-          AWS_DEFAULT_REGION: 'us-east-1'
