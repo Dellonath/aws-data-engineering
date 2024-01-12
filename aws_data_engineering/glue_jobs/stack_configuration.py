@@ -23,5 +23,5 @@ class DelloDatalakeGlueJobsStackConfiguration(DelloDatalakeCommonStackConfigurat
             'owner': 'dellonath@gmail.com',
             'company': 'dellotech consulting',
             'project': 'aws-data-engineering',
-            'environment': 'self.environment'
+            'environment': self.environment
         }
