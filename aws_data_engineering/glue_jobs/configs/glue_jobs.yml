@@ -1,0 +1,25 @@
+dello-datalake-{environment}-raw-to-trusted-job:
+  id: 'DelloDatalakeGlueJobRawToTrusted'      
+  description: 'Job resposible for process data from Raw Zone and send it to Trusted Zone'
+  max_retries: 3
+  glue_version: '3.0'
+  script_location: 'aws_data_engineering/glue_jobs/scripts/raw-to-trusted.py'
+  role: 'dello-datalake-{environment}-glue-jobs-role'
+  tags:
+    owner: 'dellonath@gmail.com'
+    company: 'dellotech consulting'
+    project: 'aws-data-engineering'
+    environment: '{environment}'
+
+dello-datalake-{environment}-trusted-to-refined-job:
+  id: 'DelloDatalakeGlueJobTrustedToRefined'      
+  description: 'Job resposible for process data from Trusted Zone and send it to Refined Zone'
+  max_retries: 3
+  glue_version: '3.0'
+  script_location: 'aws_data_engineering/glue_jobs/scripts/trusted-to-refined.py'
+  role: 'dello-datalake-{environment}-glue-jobs-role'
+  tags:
+    owner: 'dellonath@gmail.com'
+    company: 'dellotech consulting'
+    project: 'aws-data-engineering'
+    environment: '{environment}'
