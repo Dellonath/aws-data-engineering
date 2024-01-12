@@ -24,3 +24,4 @@ class DelloDatalakeGlueJobsStackConfiguration(DelloDatalakeCommonStackConfigurat
             'company': 'dellotech consulting',
             'project': 'aws-data-engineering',
             'environment': 'self.environment'
+        }
