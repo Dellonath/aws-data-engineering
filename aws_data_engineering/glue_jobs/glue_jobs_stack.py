@@ -26,9 +26,9 @@ class DellotechGlueJobsDatalakeStack(Stack):
         self.glue_jobs_role.add_to_policy(iam.PolicyStatement(
             effect = iam.Effect.ALLOW,
             resources = [
-                f'arn:aws:s3:::dello-datalake-dev-raw-{stack_configuration.aws_account_id}-{stack_configuration.aws_region}',
-                f'arn:aws:s3:::dello-datalake-dev-trusted-{stack_configuration.aws_account_id}-{stack_configuration.aws_region}',
-                f'arn:aws:s3:::dello-datalake-dev-refined-{stack_configuration.aws_account_id}-{stack_configuration.aws_region}'
+                f"arn:aws:s3:::{stack_configuration.raw_bucket_name}",
+                f"arn:aws:s3:::{stack_configuration.trusted_bucket_name}",
+                f"arn:aws:s3:::{stack_configuration.refined_bucket_name}"
             ],
             actions = ['s3:getObject', 's3:ListBucket', 's3:PutObject', 's3:DeleteObject']
         ))
