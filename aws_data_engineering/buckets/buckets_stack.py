@@ -40,10 +40,11 @@ class DellotechBucketsDatalakeStack(Stack):
         )
         
         # UTILITIES
-        self.refined_bucket = s3.Bucket(self, 'DelloDatalakeBucketUtilities',
+        self.utilities_bucket = s3.Bucket(self, 'DelloDatalakeBucketUtilities',
             bucket_name = stack_configuration.utilities_bucket_name,
             block_public_access = s3.BlockPublicAccess.BLOCK_ALL,
             encryption = s3.BucketEncryption.S3_MANAGED,
+            object_ownership = s3.ObjectOwnership.BUCKET_OWNER_PREFERRED,
             versioned = True
         )
         
