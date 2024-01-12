@@ -18,6 +18,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      
+      - name: checkout repository
+        uses: actions/checkout@v3
 
       # DEVELOPMENT DEPLOYMENT
 
@@ -26,9 +29,6 @@ jobs:
         run: |
           echo "ENVIRONMENT=dev" >> $GITHUB_ENV
           echo "AWS_ACCOUNT_ID=${{ secrets.AWS_ACCOUNT_ID_DEV }}" >> $GITHUB_ENV
-
-      - name: checkout repository
-        uses: actions/checkout@v3
 
       - name: cdk diff dev
         if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
@@ -73,9 +73,6 @@ jobs:
         run: |
           echo "ENVIRONMENT=prod" >> $GITHUB_ENV
           echo "AWS_ACCOUNT_ID=${{ secrets.AWS_ACCOUNT_ID_PROD }}" >> $GITHUB_ENV
-
-      - name: checkout repository
-        uses: actions/checkout@v3
 
       - name: cdk diff prod
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
