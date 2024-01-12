@@ -60,8 +60,8 @@ jobs:
         uses: youyo/aws-cdk-github-actions@v2
         with:
           cdk_subcommand: 'deploy'
-          cdk_args: '--all --require-approval never'
           cdk_stack: 'DellotechGlueJobsDatalakeStack'
+          cdk_args: '--require-approval never'
           actions_comment: false
       
       # PRODUTION DEPLOYMENT
