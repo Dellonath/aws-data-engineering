@@ -1,7 +1,6 @@
 from aws_data_engineering import DelloDatalakeCommonStackConfiguration
 from aws_data_engineering.buckets.buckets_stack import DelloDatalakeBucketsStackConfiguration
 
-
 class DelloDatalakeGlueJobsStackConfiguration(DelloDatalakeCommonStackConfiguration):
     
     def __init__(self,
@@ -25,5 +24,3 @@ class DelloDatalakeGlueJobsStackConfiguration(DelloDatalakeCommonStackConfigurat
             'company': 'dellotech consulting',
             'project': 'aws-data-engineering',
             'environment': 'self.environment'
-        }
-    
