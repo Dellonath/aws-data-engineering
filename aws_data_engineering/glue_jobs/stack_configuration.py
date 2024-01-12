@@ -1,4 +1,6 @@
 from aws_data_engineering import DelloDatalakeCommonStackConfiguration
+# from aws_data_engineering.buckets.buckets_stack import DellotechBucketsDatalakeStack
+
 
 class DelloDatalakeGlueJobsStackConfiguration(DelloDatalakeCommonStackConfiguration):
     
@@ -10,7 +12,7 @@ class DelloDatalakeGlueJobsStackConfiguration(DelloDatalakeCommonStackConfigurat
         
         # GLUE
         self.raw_to_trusted_job_name = 'dellotech-datalake-raw-to-trusted-job'
-        self.trusted_to_refined_job_name = 'dellotech-datalake-raw-to-trusted-job'
+        self.trusted_to_refined_job_name = 'dellotech-datalake-trusted-to-refined-job'
         self.jobs_tags = {
             'owner': 'dellonath@gmail.com',
             'company': 'dellotech consulting',
