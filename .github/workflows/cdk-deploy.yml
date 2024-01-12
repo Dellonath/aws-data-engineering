@@ -22,6 +22,11 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
 
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID_DEV }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_DEV }}
+      AWS_DEFAULT_REGION: 'us-east-1'
+
     steps:
 
       # DEVELOPMENT DEPLOYMENT
@@ -41,11 +46,7 @@ jobs:
         with:
           cdk_subcommand: 'diff'
           actions_comment: false
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID_DEV }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_DEV }}
-          AWS_DEFAULT_REGION: 'us-east-1'
-      
+ 
       - name: cdk deploy dev DellotechBucketsDatalakeStack
         if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
         uses: youyo/aws-cdk-github-actions@v2
@@ -53,10 +54,6 @@ jobs:
           cdk_subcommand: 'deploy'
           cdk_stack: 'DellotechBucketsDatalakeStack'
           actions_comment: false
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID_DEV }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_DEV }}
-          AWS_DEFAULT_REGION: 'us-east-1'
 
       - name: cdk deploy dev DellotechGlueJobsDatalakeStack
         if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
@@ -66,10 +63,6 @@ jobs:
           cdk_args: '--all --require-approval never'
           cdk_stack: 'DellotechGlueJobsDatalakeStack'
           actions_comment: false
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID_DEV }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_DEV }}
-          AWS_DEFAULT_REGION: 'us-east-1'
       
       # PRODUTION DEPLOYMENT
 
