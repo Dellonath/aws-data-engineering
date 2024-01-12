@@ -12,16 +12,17 @@ class DelloDatalakeGlueJobsStackConfiguration(DelloDatalakeCommonStackConfigurat
         self.raw_bucket_name = buckets_stack_configuration.raw_bucket_name
         self.trusted_bucket_name = buckets_stack_configuration.trusted_bucket_name
         self.refined_bucket_name = buckets_stack_configuration.refined_bucket_name
+        self.utilities_bucket_name = buckets_stack_configuration.utilities_bucket_name
         
         # IAM
-        self.glue_jobs_role_name = f'{self.project_prefix}-{self.environment}-glue-jobs-role'
+        self.glue_jobs_role_name = f'dello-datalake-{self.deployment_key}-glue-jobs-role'
         
         # GLUE
-        self.raw_to_trusted_job_name = f'{self.project_prefix}-{self.environment}-raw-to-trusted-job'
-        self.trusted_to_refined_job_name = f'{self.project_prefix}-{self.environment}-trusted-to-refined-job'
+        self.raw_to_trusted_job_name = f'dello-datalake-{self.deployment_key}-raw-to-trusted-job'
+        self.trusted_to_refined_job_name = f'dello-datalake-{self.deployment_key}-trusted-to-refined-job'
         self.jobs_tags = {
             'owner': 'dellonath@gmail.com',
             'company': 'dellotech consulting',
             'project': 'aws-data-engineering',
-            'environment': self.environment
+            'deployment_key': self.deployment_key
         }

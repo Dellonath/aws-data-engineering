@@ -22,6 +22,8 @@ jobs:
       - name: checkout repository
         uses: actions/checkout@v3
 
+      
+
       # DEVELOPMENT DEPLOYMENT
 
       - name: set envs to development
@@ -29,6 +31,17 @@ jobs:
         run: |
           echo "ENVIRONMENT=dev" >> $GITHUB_ENV
           echo "AWS_ACCOUNT_ID=${{ secrets.AWS_ACCOUNT_ID_DEV }}" >> $GITHUB_ENV
+      
+      - name: s3 upload
+        if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
+        uses: shallwefootball/s3-upload-action@master
+        id: S3
+        with:
+          aws_key_id: ${{ secrets.AWS_ACCESS_KEY_ID_DEV }}
+          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY_DEV}}
+          aws_bucket: 'dello-datalake-dev-utilities-339712827658-us-east-1'
+          source_dir: 'aws_data_engineering/glue_jobs/scripts'
+          destination_dir: 'glue_jobs/scripts'
 
       - name: cdk diff dev
         if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
