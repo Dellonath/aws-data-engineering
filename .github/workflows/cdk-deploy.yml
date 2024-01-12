@@ -38,6 +38,7 @@ jobs:
               echo "AWS_ACCOUNT_ID=${{ secrets.AWS_ACCOUNT_ID_DEV }}" >> $GITHUB_ENV
             fi
           fi
+          echo ENVIRONMENT=$ENVIRONMENT
 
       - name: checkout repository
         uses: actions/checkout@v3
