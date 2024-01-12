@@ -17,7 +17,12 @@ class DellotechGlueJobsDatalakeStack(Stack):
             stack_configuration: DelloDatalakeGlueJobsStackConfiguration = DelloDatalakeGlueJobsStackConfiguration(), 
             **kwargs) -> None:
         super().__init__(scope, construct_id, **kwargs)
-                
+        
+        
+        self.aws_account_id = stack_configuration.aws_account_id
+        self.aws_region = stack_configuration.aws_region
+        self.deployment_key = stack_configuration.deployment_key
+               
         # GLUE JOBS ROLE
         self.glue_jobs_role = iam.Role(self, 'DelloDatalakeGlueJobsRole',
             role_name = stack_configuration.glue_jobs_role_name,                           
@@ -35,42 +40,38 @@ class DellotechGlueJobsDatalakeStack(Stack):
             actions = ['s3:getObject', 's3:ListBucket', 's3:PutObject', 's3:DeleteObject']
         ))
         
-        with open(f'{os.getcwd()}/aws_data_engineering/glue_jobs/configs/glue_jobs.yml', 'r') as file:
-            glue_jobs_configs = self.__attribute_variables_to_yaml_config(yaml.safe_load(file))
+        self.glue_jobs_role.add_to_policy(iam.PolicyStatement(
+            effect = iam.Effect.ALLOW,
+            resources = [
+                f"arn:aws:s3:::{stack_configuration.utilities_bucket_name}"
+            ],
+            actions = ['s3:getObject', 's3:ListBucket']
+        ))
+        
+        
+        # GLUE JOBS
+        with open(f'{os.getcwd()}/aws_data_engineering/glue_jobs/configs/glue_jobs.yaml', 'r') as yaml_file:
+            glue_jobs_configs = self.__attribute_variables(yaml.safe_load(yaml_file))
 
-        # RAW-TO-TRUSTED
-        for glue_job_config in glue_jobs_configs.keys():
+        for job_name, job_config in glue_jobs_configs.items():
             
             glue.CfnJob(self, 
-                name = glue_job_config,
+                name = job_name,
                 command = glue.CfnJob.JobCommandProperty(
-                    name = 'glueetl',
-                    python_version = '3',
-                    script_location = os.path.join(os.getcwd(), glue_jobs_configs[glue_job_config].pop('script_location'))
+                    **job_config.pop('command')
                 ),
-            **glue_jobs_configs[glue_job_config])
+                **job_config)
+            
         
-        # TRUSTED-TO-REFINED
-        # self.raw_to_trusted_job = glue.CfnJob(self, 'DelloDatalakeGlueJobTrustedToRefined',
-        #     name = stack_configuration.trusted_to_refined_job_name,
-        #     description = 'Job resposible for process data from Trusted Zone and send it to Refined Zone',
-        #     max_retries = 3,
-        #     glue_version = '3.0',
-        #     command = glue.CfnJob.JobCommandProperty(
-        #         name = 'glueetl',
-        #         python_version = '3',
-        #         script_location = os.path.join(os.getcwd(), 'scripts/trusted-to-refined.py')
-        #     ),
-        #     tags = stack_configuration.jobs_tags,
-        #     role = stack_configuration.glue_jobs_role_name
-        # )
-        
-    def __attribute_variables_to_yaml_config(self, config: dict) -> dict:
-        
-        environment='dev'
+    def __attribute_variables(self, config: dict) -> dict:
     
-        yaml_configs_str = f'{json.dumps(config)}'.replace('{environment}', environment)
+        yaml_configs_str = (f'{json.dumps(config)}'
+            .replace('{aws_account_id}', self.aws_account_id)
+            .replace('{aws_region}', self.aws_region)
+            .replace('{deployment_key}', self.deployment_key))
+            
         yaml_configs_dict = json.loads(yaml_configs_str) 
+        
         return yaml_configs_dict
         
         
