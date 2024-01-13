@@ -28,7 +28,9 @@ class DelloDatalakeGlueWorkflowsStack(Stack):
                 
                 glue.CfnWorkflow(self, workflow_name,
                     name = workflow_name,
-                    description = triggers_config.pop('description', None)
+                    description = triggers_config.pop('description', None),
+                    max_concurrent_runs = triggers_config.pop('max_concurrent_runs', None),
+                    tags = triggers_config.pop('tags', None)
                 )
 
                 for trigger_name, trigger_config in triggers_config.items():
@@ -53,7 +55,8 @@ class DelloDatalakeGlueWorkflowsStack(Stack):
                                 job_name = job_name
                             )
                             for job_name in trigger_config.pop('initiates')
-                        ]
+                        ],
+                        type = trigger_config.get('tags')
                     )
         
         
