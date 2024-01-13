@@ -1,15 +1,14 @@
+import os
+import yaml
 from aws_cdk import (
     Stack,
     aws_glue as glue,
     aws_iam as iam
 )
-import os
 from constructs import Construct
 from .stack_configuration import DelloDatalakeGlueJobsStackConfiguration
-import json
-import yaml
 
-class DellotechGlueJobsDatalakeStack(Stack):
+class DelloDatalakeGlueJobsStack(Stack):
 
     def __init__(self, 
             scope: Construct, 
@@ -48,33 +47,19 @@ class DellotechGlueJobsDatalakeStack(Stack):
             actions = ['s3:getObject', 's3:ListBucket']
         ))
         
-        
         # GLUE JOBS
-        with open(f'{os.getcwd()}/aws_data_engineering/glue_jobs/configs/jobs_configs.yaml', 'r') as yaml_file:
-            glue_jobs_configs = self.__attribute_variables(yaml.safe_load(yaml_file))
+        jobs_path = f'{os.getcwd()}/aws_data_engineering/glue/jobs/configs/'
+        for jobs_config_file in os.listdir(jobs_path):
+            
+            with open(jobs_path + jobs_config_file, 'r') as yaml_file:
+                glue_jobs_configs = stack_configuration._attribute_variables(yaml.safe_load(yaml_file))
 
-        for job_name, job_config in glue_jobs_configs.items():
-            
-            glue.CfnJob(self, 
-                name = job_name,
-                command = glue.CfnJob.JobCommandProperty(
-                    **job_config.pop('command')
-                ),
-                **job_config)
-            
-        
-    def __attribute_variables(self, config: dict) -> dict:
-    
-        yaml_configs_str = (f'{json.dumps(config)}'
-            .replace('{aws_account_id}', self.aws_account_id)
-            .replace('{aws_region}', self.aws_region)
-            .replace('{deployment_key}', self.deployment_key))
-            
-        yaml_configs_dict = json.loads(yaml_configs_str) 
-        
-        return yaml_configs_dict
-        
-        
-        
-        
+            for job_name, job_config in glue_jobs_configs.items():
+                
+                glue.CfnJob(self, 
+                    name = job_name,
+                    command = glue.CfnJob.JobCommandProperty(
+                        **job_config.pop('command')
+                    ),
+                    **job_config)  
         

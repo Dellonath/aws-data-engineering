@@ -4,14 +4,14 @@ from aws_cdk import (
 )
 
 from constructs import Construct
-from .stack_configuration import DelloDatalakeBucketsStackConfiguration
+from .stack_configuration import DelloDatalakeS3BucketsStackConfiguration
 
-class DellotechBucketsDatalakeStack(Stack):
+class DelloDatalakeS3BucketsStack(Stack):
 
     def __init__(self, 
             scope: Construct, 
             construct_id: str, 
-            stack_configuration: DelloDatalakeBucketsStackConfiguration = DelloDatalakeBucketsStackConfiguration(), 
+            stack_configuration: DelloDatalakeS3BucketsStackConfiguration = DelloDatalakeS3BucketsStackConfiguration(), 
             **kwargs) -> None:
         super().__init__(scope, construct_id, **kwargs)
 

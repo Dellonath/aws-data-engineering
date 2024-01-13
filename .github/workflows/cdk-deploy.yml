@@ -48,8 +48,8 @@ jobs:
           aws_key_id: ${{ env.AWS_ACCESS_KEY_ID_DEV }}
           aws_secret_access_key: ${{ env.AWS_SECRET_ACCESS_KEY_DEV}}
           aws_bucket: 'dello-datalake-${{ env.DEPLOYMENT_KEY_DEV }}-utilities-${{ env.AWS_ACCOUNT_ID_DEV }}-${{ env.AWS_REGION }}'
-          source_dir: 'aws_data_engineering/glue_jobs/scripts'
-          destination_dir: 'glue_jobs/scripts'
+          source_dir: 'aws_data_engineering/glue/jobs/scripts'
+          destination_dir: 'glue/jobs/scripts'
 
       - name: cdk diff dev
         if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
@@ -102,8 +102,8 @@ jobs:
           aws_key_id: ${{ env.AWS_ACCESS_KEY_ID_DEV }}
           aws_secret_access_key: ${{ env.AWS_SECRET_ACCESS_KEY_DEV}}
           aws_bucket: 'dello-datalake-${{ env.DEPLOYMENT_KEY_DEV }}-utilities-${{ env.AWS_ACCOUNT_ID_DEV }}-${{ env.AWS_REGION }}'
-          source_dir: 'aws_data_engineering/glue_jobs/scripts'
-          destination_dir: 'glue_jobs/scripts'
+          source_dir: 'aws_data_engineering/glue/jobs/scripts'
+          destination_dir: 'glue/jobs/scripts'
 
       - name: cdk diff prod
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'

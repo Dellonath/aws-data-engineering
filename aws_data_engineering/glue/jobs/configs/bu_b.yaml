@@ -1,0 +1,31 @@
+dello-datalake-{deployment_key}-raw-to-trusted-job-bu-b:
+  id: 'DelloDatalakeGlueJobRawToTrustedBuB'      
+  description: 'Job resposible for process data from Raw and send it to Trusted'
+  max_retries: 3
+  glue_version: '3.0'
+  command:
+    name: 'glueetl'
+    python_version: '3'
+    script_location: 's3://dello-datalake-{deployment_key}-utilities-{aws_account_id}-{aws_region}/glue/jobs/scripts/bu_b/raw-to-trusted.py'
+  role: 'dello-datalake-{deployment_key}-glue-jobs-role'
+  tags:
+    owner: 'dellonath@gmail.com'
+    company: 'dellotech consulting'
+    project: 'aws-data-engineering'
+    deployment_key: '{deployment_key}'
+
+dello-datalake-{deployment_key}-trusted-to-refined-job-bu-b:
+  id: 'DelloDatalakeGlueJobTrustedToRefinedBuB'      
+  description: 'Job resposible for process data from Trusted and send it to Refined'
+  max_retries: 3
+  glue_version: '3.0'
+  command:
+    name: 'glueetl'
+    python_version: '3'
+    script_location: 's3://dello-datalake-{deployment_key}-utilities-{aws_account_id}-{aws_region}/glue/jobs/scripts/bu_b/trusted-to-refined.py'
+  role: 'dello-datalake-{deployment_key}-glue-jobs-role'
+  tags:
+    owner: 'dellonath@gmail.com'
+    company: 'dellotech consulting'
+    project: 'aws-data-engineering'
+    deployment_key: '{deployment_key}'

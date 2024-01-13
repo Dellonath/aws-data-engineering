@@ -1,3 +1,3 @@
 # raw to trusted script
 
-print("running")
+print("running bu_b")

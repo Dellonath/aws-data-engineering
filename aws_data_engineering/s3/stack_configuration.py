@@ -1,6 +1,6 @@
 from aws_data_engineering import DelloDatalakeCommonStackConfiguration
 
-class DelloDatalakeBucketsStackConfiguration(DelloDatalakeCommonStackConfiguration):
+class DelloDatalakeS3BucketsStackConfiguration(DelloDatalakeCommonStackConfiguration):
     
     def __init__(self):
         super().__init__()

@@ -1,10 +1,10 @@
 from aws_data_engineering import DelloDatalakeCommonStackConfiguration
-from aws_data_engineering.buckets.buckets_stack import DelloDatalakeBucketsStackConfiguration
+from aws_data_engineering.s3.buckets_stack import DelloDatalakeS3BucketsStackConfiguration
 
 class DelloDatalakeGlueJobsStackConfiguration(DelloDatalakeCommonStackConfiguration):
     
     def __init__(self,
-            buckets_stack_configuration: DelloDatalakeBucketsStackConfiguration = DelloDatalakeBucketsStackConfiguration(),
+            buckets_stack_configuration: DelloDatalakeS3BucketsStackConfiguration = DelloDatalakeS3BucketsStackConfiguration(),
             **kwargs) -> None:
         super().__init__(**kwargs)
         
@@ -16,4 +16,3 @@ class DelloDatalakeGlueJobsStackConfiguration(DelloDatalakeCommonStackConfigurat
         
         # IAM
         self.glue_jobs_role_name = f'dello-datalake-{self.deployment_key}-glue-jobs-role'
-        
