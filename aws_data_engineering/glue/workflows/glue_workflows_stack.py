@@ -44,15 +44,15 @@ class DelloDatalakeGlueWorkflowsStack(Stack):
                                     logical_operator = 'EQUALS',
                                     state = 'SUCCEEDED'
                                 )
-                                for job_name in trigger_config.get('dependencies', [])
+                                for job_name in trigger_config.get('dependencies')
                             ],
                             logical = 'AND'
-                        ),
+                        ) if trigger_config.get('dependencies') else None,
                         actions = [
                             glue.CfnTrigger.ActionProperty(
                                 job_name = job_name
                             )
-                            for job_name in trigger_config.get('initiates')
+                            for job_name in trigger_config.pop('initiates')
                         ]
                     )
         
