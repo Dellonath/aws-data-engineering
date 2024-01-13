@@ -50,7 +50,7 @@ class DellotechGlueJobsDatalakeStack(Stack):
         
         
         # GLUE JOBS
-        with open(f'{os.getcwd()}/aws_data_engineering/glue_jobs/configs/glue_jobs.yaml', 'r') as yaml_file:
+        with open(f'{os.getcwd()}/aws_data_engineering/glue_jobs/configs/jobs_configs.yaml', 'r') as yaml_file:
             glue_jobs_configs = self.__attribute_variables(yaml.safe_load(yaml_file))
 
         for job_name, job_config in glue_jobs_configs.items():

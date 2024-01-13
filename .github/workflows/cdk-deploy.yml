@@ -13,6 +13,17 @@ on:
 permissions:
   contents: read
 
+env:
+  AWS_REGION: 'us-east-1'
+  DEPLOYMENT_KEY_DEV: 'dev'
+  AWS_ACCOUNT_ID_DEV: ${{ secrets.AWS_ACCOUNT_ID_DEV }}
+  AWS_ACCESS_KEY_ID_DEV: ${{ secrets.AWS_ACCESS_KEY_ID_DEV}}
+  AWS_SECRET_ACCESS_KEY_DEV: ${{ secrets.AWS_SECRET_ACCESS_KEY_DEV}}
+  DEPLOYMENT_KEY_PROD: 'prod'
+  AWS_ACCOUNT_ID_PROD: ${{ secrets.AWS_ACCOUNT_ID_PROD }}
+  AWS_ACCESS_KEY_ID_PROD: ${{ secrets.AWS_ACCESS_KEY_ID_PROD}}
+  AWS_SECRET_ACCESS_KEY_PROD: ${{ secrets.AWS_SECRET_ACCESS_KEY_PROD}}
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -22,24 +33,21 @@ jobs:
       - name: checkout repository
         uses: actions/checkout@v3
 
-      
-
       # DEVELOPMENT DEPLOYMENT
 
       - name: set envs to development
         if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
         run: |
           echo "ENVIRONMENT=dev" >> $GITHUB_ENV
-          echo "AWS_ACCOUNT_ID=${{ secrets.AWS_ACCOUNT_ID_DEV }}" >> $GITHUB_ENV
+          echo "AWS_ACCOUNT_ID=${{ env.AWS_ACCOUNT_ID_DEV }}" >> $GITHUB_ENV
       
-      - name: s3 upload
+      - name: s3 upload glue scripts dev
         if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
         uses: shallwefootball/s3-upload-action@master
-        id: S3
         with:
-          aws_key_id: ${{ secrets.AWS_ACCESS_KEY_ID_DEV }}
-          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY_DEV}}
-          aws_bucket: 'dello-datalake-dev-utilities-339712827658-us-east-1'
+          aws_key_id: ${{ env.AWS_ACCESS_KEY_ID_DEV }}
+          aws_secret_access_key: ${{ env.AWS_SECRET_ACCESS_KEY_DEV}}
+          aws_bucket: 'dello-datalake-${{ env.DEPLOYMENT_KEY_DEV }}-utilities-${{ env.AWS_ACCOUNT_ID_DEV }}-${{ env.AWS_REGION }}'
           source_dir: 'aws_data_engineering/glue_jobs/scripts'
           destination_dir: 'glue_jobs/scripts'
 
@@ -47,9 +55,9 @@ jobs:
         if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
         uses: youyo/aws-cdk-github-actions@v2
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID_DEV }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_DEV }}
-          AWS_DEFAULT_REGION: 'us-east-1'
+          AWS_ACCESS_KEY_ID: ${{ env.AWS_ACCESS_KEY_ID_DEV }}
+          AWS_SECRET_ACCESS_KEY: ${{ env.AWS_SECRET_ACCESS_KEY_DEV }}
+          AWS_DEFAULT_REGION: ${{ env.AWS_REGION }}
         with:
           cdk_subcommand: 'diff'
           actions_comment: false
@@ -58,9 +66,9 @@ jobs:
         if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
         uses: youyo/aws-cdk-github-actions@v2
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID_DEV }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_DEV }}
-          AWS_DEFAULT_REGION: 'us-east-1'
+          AWS_ACCESS_KEY_ID: ${{ env.AWS_ACCESS_KEY_ID_DEV }}
+          AWS_SECRET_ACCESS_KEY: ${{ env.AWS_SECRET_ACCESS_KEY_DEV }}
+          AWS_DEFAULT_REGION: ${{ env.AWS_REGION }}
         with:
           cdk_subcommand: 'deploy'
           cdk_stack: 'DellotechBucketsDatalakeStack'
@@ -70,9 +78,9 @@ jobs:
         if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
         uses: youyo/aws-cdk-github-actions@v2
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID_DEV }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_DEV }}
-          AWS_DEFAULT_REGION: 'us-east-1'
+          AWS_ACCESS_KEY_ID: ${{ env.AWS_ACCESS_KEY_ID_DEV }}
+          AWS_SECRET_ACCESS_KEY: ${{ env.AWS_SECRET_ACCESS_KEY_DEV }}
+          AWS_DEFAULT_REGION: ${{ env.AWS_REGION }}
         with:
           cdk_subcommand: 'deploy'
           cdk_args: '--require-approval never'
@@ -84,16 +92,26 @@ jobs:
       - name: set envs to production
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
         run: |
-          echo "ENVIRONMENT=prod" >> $GITHUB_ENV
-          echo "AWS_ACCOUNT_ID=${{ secrets.AWS_ACCOUNT_ID_PROD }}" >> $GITHUB_ENV
+          echo "ENVIRONMENT=${{ env.DEPLOYMENT_KEY_PROD }}" >> $GITHUB_ENV
+          echo "AWS_ACCOUNT_ID=${{ env.AWS_ACCOUNT_ID_PROD }}" >> $GITHUB_ENV
+
+      - name: s3 upload glue scripts prod
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        uses: shallwefootball/s3-upload-action@master
+        with:
+          aws_key_id: ${{ env.AWS_ACCESS_KEY_ID_DEV }}
+          aws_secret_access_key: ${{ env.AWS_SECRET_ACCESS_KEY_DEV}}
+          aws_bucket: 'dello-datalake-${{ env.DEPLOYMENT_KEY_DEV }}-utilities-${{ env.AWS_ACCOUNT_ID_DEV }}-${{ env.AWS_REGION }}'
+          source_dir: 'aws_data_engineering/glue_jobs/scripts'
+          destination_dir: 'glue_jobs/scripts'
 
       - name: cdk diff prod
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
         uses: youyo/aws-cdk-github-actions@v2
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID_PROD }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_PROD }}
-          AWS_DEFAULT_REGION: 'us-east-1'
+          AWS_ACCESS_KEY_ID: ${{ env.AWS_ACCESS_KEY_ID_PROD }}
+          AWS_SECRET_ACCESS_KEY: ${{ env.AWS_SECRET_ACCESS_KEY_PROD }}
+          AWS_DEFAULT_REGION: ${{ env.AWS_REGION }}
         with:
           cdk_subcommand: 'diff'
           actions_comment: false
@@ -102,9 +120,9 @@ jobs:
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
         uses: youyo/aws-cdk-github-actions@v2
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID_PROD }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_PROD }}
-          AWS_DEFAULT_REGION: 'us-east-1'
+          AWS_ACCESS_KEY_ID: ${{ env.AWS_ACCESS_KEY_ID_PROD }}
+          AWS_SECRET_ACCESS_KEY: ${{ env.AWS_SECRET_ACCESS_KEY_PROD }}
+          AWS_DEFAULT_REGION: ${{ env.AWS_REGION }}
         with:
           cdk_subcommand: 'deploy'
           cdk_stack: 'DellotechBucketsDatalakeStack'
@@ -114,9 +132,9 @@ jobs:
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
         uses: youyo/aws-cdk-github-actions@v2
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID_PROD }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_PROD }}
-          AWS_DEFAULT_REGION: 'us-east-1'
+          AWS_ACCESS_KEY_ID: ${{ env.AWS_ACCESS_KEY_ID_PROD }}
+          AWS_SECRET_ACCESS_KEY: ${{ env.AWS_SECRET_ACCESS_KEY_PROD }}
+          AWS_DEFAULT_REGION: ${{ env.AWS_REGION }}
         with:
           cdk_subcommand: 'deploy'
           cdk_args: '--require-approval never'
