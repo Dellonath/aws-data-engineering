@@ -62,7 +62,7 @@ jobs:
           cdk_subcommand: 'diff'
           actions_comment: false
  
-      - name: cdk deploy dev DellotechBucketsDatalakeStack
+      - name: cdk deploy dev DelloDatalakeS3BucketsStack
         if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
         uses: youyo/aws-cdk-github-actions@v2
         env:
@@ -71,10 +71,10 @@ jobs:
           AWS_DEFAULT_REGION: ${{ env.AWS_REGION }}
         with:
           cdk_subcommand: 'deploy'
-          cdk_stack: 'DellotechBucketsDatalakeStack'
+          cdk_stack: 'DelloDatalakeS3BucketsStack'
           actions_comment: false
 
-      - name: cdk deploy dev DellotechGlueJobsDatalakeStack
+      - name: cdk deploy dev DelloDatalakeGlueJobsStack
         if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
         uses: youyo/aws-cdk-github-actions@v2
         env:
@@ -84,7 +84,19 @@ jobs:
         with:
           cdk_subcommand: 'deploy'
           cdk_args: '--require-approval never'
-          cdk_stack: 'DellotechGlueJobsDatalakeStack'
+          cdk_stack: 'DelloDatalakeGlueJobsStack'
+          actions_comment: false
+      
+      - name: cdk deploy dev DelloDatalakeGlueWorkflowsStack
+        if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
+        uses: youyo/aws-cdk-github-actions@v2
+        env:
+          AWS_ACCESS_KEY_ID: ${{ env.AWS_ACCESS_KEY_ID_DEV }}
+          AWS_SECRET_ACCESS_KEY: ${{ env.AWS_SECRET_ACCESS_KEY_DEV }}
+          AWS_DEFAULT_REGION: ${{ env.AWS_REGION }}
+        with:
+          cdk_subcommand: 'deploy'
+          cdk_stack: 'DelloDatalakeGlueWorkflowsStack'
           actions_comment: false
       
       # PRODUCTION DEPLOYMENT
@@ -116,7 +128,7 @@ jobs:
           cdk_subcommand: 'diff'
           actions_comment: false
  
-      - name: cdk deploy prod DellotechBucketsDatalakeStack
+      - name: cdk deploy prod DelloDatalakeS3BucketsStack
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
         uses: youyo/aws-cdk-github-actions@v2
         env:
@@ -125,10 +137,10 @@ jobs:
           AWS_DEFAULT_REGION: ${{ env.AWS_REGION }}
         with:
           cdk_subcommand: 'deploy'
-          cdk_stack: 'DellotechBucketsDatalakeStack'
+          cdk_stack: 'DelloDatalakeS3BucketsStack'
           actions_comment: false
 
-      - name: cdk deploy prod DellotechGlueJobsDatalakeStack
+      - name: cdk deploy prod DelloDatalakeGlueJobsStack
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
         uses: youyo/aws-cdk-github-actions@v2
         env:
@@ -138,5 +150,18 @@ jobs:
         with:
           cdk_subcommand: 'deploy'
           cdk_args: '--require-approval never'
-          cdk_stack: 'DellotechGlueJobsDatalakeStack'
+          cdk_stack: 'DelloDatalakeGlueJobsStack'
           actions_comment: false
+      
+      - name: cdk deploy prod DelloDatalakeGlueWorkflowsStack
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        uses: youyo/aws-cdk-github-actions@v2
+        env:
+          AWS_ACCESS_KEY_ID: ${{ env.AWS_ACCESS_KEY_ID_PROD }}
+          AWS_SECRET_ACCESS_KEY: ${{ env.AWS_SECRET_ACCESS_KEY_PROD }}
+          AWS_DEFAULT_REGION: ${{ env.AWS_REGION }}
+        with:
+          cdk_subcommand: 'deploy'
+          cdk_stack: 'DelloDatalakeGlueWorkflowsStack'
+          actions_comment: false
+  

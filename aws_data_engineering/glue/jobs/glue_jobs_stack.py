@@ -36,7 +36,12 @@ class DelloDatalakeGlueJobsStack(Stack):
                 f"arn:aws:s3:::{stack_configuration.trusted_bucket_name}",
                 f"arn:aws:s3:::{stack_configuration.refined_bucket_name}"
             ],
-            actions = ['s3:getObject', 's3:ListBucket', 's3:PutObject', 's3:DeleteObject']
+            actions = [
+                's3:getObject', 
+                's3:ListBucket', 
+                's3:PutObject', 
+                's3:DeleteObject'
+            ]
         ))
         
         self.glue_jobs_role.add_to_policy(iam.PolicyStatement(
@@ -44,7 +49,10 @@ class DelloDatalakeGlueJobsStack(Stack):
             resources = [
                 f"arn:aws:s3:::{stack_configuration.utilities_bucket_name}"
             ],
-            actions = ['s3:getObject', 's3:ListBucket']
+            actions = [
+                's3:getObject', 
+                's3:ListBucket'
+            ]
         ))
         
         # GLUE JOBS
