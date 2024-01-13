@@ -9,6 +9,9 @@ def test_sqs_queue_created():
     app = core.App()
     stack = DelloDatalakeS3BucketsStack(app, 'aws_data_engineering')
     template = assertions.Template.from_stack(stack)
+    
+    # 1. test utility bucket name using regex
+    # 2. test utility bucket permissions to accept ACLs to upload glue job scripts 
 
 #     template.has_resource_properties('AWS::SQS::Queue', {
 #         'VisibilityTimeout': 300

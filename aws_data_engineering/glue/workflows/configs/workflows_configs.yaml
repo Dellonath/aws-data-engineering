@@ -1,31 +1,40 @@
-dello-datalake-{deployment_key}-raw-to-trusted-job:
-  id: 'DelloDatalakeGlueJobRawToTrusted'      
-  description: 'Job resposible for process data from Raw and send it to Trusted'
-  max_retries: 3
-  glue_version: '3.0'
-  command:
-    name: 'glueetl'
-    python_version: '3'
-    script_location: 's3://dello-datalake-{deployment_key}-utilities-{aws_account_id}-{aws_region}/glue_jobs/scripts/raw-to-trusted.py'
-  role: 'dello-datalake-{deployment_key}-glue-jobs-role'
-  tags:
-    owner: 'dellonath@gmail.com'
-    company: 'dellotech consulting'
-    project: 'aws-data-engineering'
-    deployment_key: '{deployment_key}'
 
-dello-datalake-{deployment_key}-trusted-to-refined-job:
-  id: 'DelloDatalakeGlueJobTrustedToRefined'      
-  description: 'Job resposible for process data from Trusted and send it to Refined'
-  max_retries: 3
-  glue_version: '3.0'
-  command:
-    name: 'glueetl'
-    python_version: '3'
-    script_location: 's3://dello-datalake-{deployment_key}-utilities-{aws_account_id}-{aws_region}/glue_jobs/scripts/trusted-to-refined.py'
-  role: 'dello-datalake-{deployment_key}-glue-jobs-role'
-  tags:
-    owner: 'dellonath@gmail.com'
-    company: 'dellotech consulting'
-    project: 'aws-data-engineering'
-    deployment_key: '{deployment_key}'
+dello-datalake-{deployment_key}-workflow-bu-a:
+
+  description: 'Process data for bu A'
+  
+  dello-datalake-{deployment_key}-start-trigger:
+    id: 'DelloDatalakeWorkflowAStartTrigger'
+    type: 'ON_DEMAND'
+    initiates: 
+      - 'dello-datalake-{deployment_key}-trusted-to-refined-bu-a-1'
+      - 'dello-datalake-{deployment_key}-trusted-to-refined-bu-a-2'
+
+  dello-datalake-{deployment_key}-trigger-2:
+    id: 'DelloDatalakeWorkflowATrigger2'
+    type: 'CONDITIONAL'
+    dependencies: 
+      - 'dello-datalake-{deployment_key}-trusted-to-refined-bu-a-1'
+      - 'dello-datalake-{deployment_key}-trusted-to-refined-bu-a-2'
+    initiates: 
+      - 'dello-datalake-{deployment_key}-trusted-to-refined-bu-a-3'
+
+  dello-datalake-{deployment_key}-trigger-3:
+    id: 'DelloDatalakeWorkflowATrigger3'
+    type: 'CONDITIONAL'
+    dependencies: 
+      - 'dello-datalake-{deployment_key}-trusted-to-refined-bu-a-3'
+    initiates: 
+      - 'dello-datalake-{deployment_key}-trusted-to-refined-bu-a-4'
+      - 'dello-datalake-{deployment_key}-trusted-to-refined-bu-a-5'
+      - 'dello-datalake-{deployment_key}-trusted-to-refined-bu-a-6'
+
+  dello-datalake-{deployment_key}-trigger-4:
+    id: 'DelloDatalakeWorkflowATrigger4'
+    type: 'CONDITIONAL'
+    dependencies: 
+      - 'dello-datalake-{deployment_key}-trusted-to-refined-bu-a-4'
+      - 'dello-datalake-{deployment_key}-trusted-to-refined-bu-a-5'
+      - 'dello-datalake-{deployment_key}-trusted-to-refined-bu-a-6'
+    initiates: 
+      - 'dello-datalake-{deployment_key}-trusted-to-refined-bu-a-7'

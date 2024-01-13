@@ -1,5 +1,5 @@
-dello-datalake-{deployment_key}-raw-to-trusted-job-bu-a:
-  id: 'DelloDatalakeGlueJobRawToTrusted'      
+dello-datalake-{deployment_key}-raw-to-trusted-job-bu-a-1:
+  id: 'DelloDatalakeGlueJobRawToTrusted1'      
   description: 'Job resposible for process data from Raw and send it to Trusted'
   max_retries: 3
   glue_version: '3.0'
@@ -14,8 +14,88 @@ dello-datalake-{deployment_key}-raw-to-trusted-job-bu-a:
     project: 'aws-data-engineering'
     deployment_key: '{deployment_key}'
 
-dello-datalake-{deployment_key}-trusted-to-refined-bu-a:
-  id: 'DelloDatalakeGlueJobTrustedToRefined'      
+dello-datalake-{deployment_key}-trusted-to-refined-bu-a-2:
+  id: 'DelloDatalakeGlueJobTrustedToRefined2'      
+  description: 'Job resposible for process data from Trusted and send it to Refined'
+  max_retries: 3
+  glue_version: '3.0'
+  command:
+    name: 'glueetl'
+    python_version: '3'
+    script_location: 's3://dello-datalake-{deployment_key}-utilities-{aws_account_id}-{aws_region}/glue/jobs/scripts/bu_b/trusted-to-refined.py'
+  role: 'dello-datalake-{deployment_key}-glue-jobs-role'
+  tags:
+    owner: 'dellonath@gmail.com'
+    company: 'dellotech consulting'
+    project: 'aws-data-engineering'
+    deployment_key: '{deployment_key}'
+
+dello-datalake-{deployment_key}-trusted-to-refined-bu-a-3:
+  id: 'DelloDatalakeGlueJobTrustedToRefined3'      
+  description: 'Job resposible for process data from Trusted and send it to Refined'
+  max_retries: 3
+  glue_version: '3.0'
+  command:
+    name: 'glueetl'
+    python_version: '3'
+    script_location: 's3://dello-datalake-{deployment_key}-utilities-{aws_account_id}-{aws_region}/glue/jobs/scripts/bu_b/trusted-to-refined.py'
+  role: 'dello-datalake-{deployment_key}-glue-jobs-role'
+  tags:
+    owner: 'dellonath@gmail.com'
+    company: 'dellotech consulting'
+    project: 'aws-data-engineering'
+    deployment_key: '{deployment_key}'
+
+dello-datalake-{deployment_key}-trusted-to-refined-bu-a-4:
+  id: 'DelloDatalakeGlueJobTrustedToRefined4'      
+  description: 'Job resposible for process data from Trusted and send it to Refined'
+  max_retries: 3
+  glue_version: '3.0'
+  command:
+    name: 'glueetl'
+    python_version: '3'
+    script_location: 's3://dello-datalake-{deployment_key}-utilities-{aws_account_id}-{aws_region}/glue/jobs/scripts/bu_b/trusted-to-refined.py'
+  role: 'dello-datalake-{deployment_key}-glue-jobs-role'
+  tags:
+    owner: 'dellonath@gmail.com'
+    company: 'dellotech consulting'
+    project: 'aws-data-engineering'
+    deployment_key: '{deployment_key}'
+
+dello-datalake-{deployment_key}-trusted-to-refined-bu-a-5:
+  id: 'DelloDatalakeGlueJobTrustedToRefined5'      
+  description: 'Job resposible for process data from Trusted and send it to Refined'
+  max_retries: 3
+  glue_version: '3.0'
+  command:
+    name: 'glueetl'
+    python_version: '3'
+    script_location: 's3://dello-datalake-{deployment_key}-utilities-{aws_account_id}-{aws_region}/glue/jobs/scripts/bu_b/trusted-to-refined.py'
+  role: 'dello-datalake-{deployment_key}-glue-jobs-role'
+  tags:
+    owner: 'dellonath@gmail.com'
+    company: 'dellotech consulting'
+    project: 'aws-data-engineering'
+    deployment_key: '{deployment_key}'
+
+dello-datalake-{deployment_key}-trusted-to-refined-bu-a-6:
+  id: 'DelloDatalakeGlueJobTrustedToRefined6'      
+  description: 'Job resposible for process data from Trusted and send it to Refined'
+  max_retries: 3
+  glue_version: '3.0'
+  command:
+    name: 'glueetl'
+    python_version: '3'
+    script_location: 's3://dello-datalake-{deployment_key}-utilities-{aws_account_id}-{aws_region}/glue/jobs/scripts/bu_b/trusted-to-refined.py'
+  role: 'dello-datalake-{deployment_key}-glue-jobs-role'
+  tags:
+    owner: 'dellonath@gmail.com'
+    company: 'dellotech consulting'
+    project: 'aws-data-engineering'
+    deployment_key: '{deployment_key}'
+
+dello-datalake-{deployment_key}-trusted-to-refined-bu-a-7:
+  id: 'DelloDatalakeGlueJobTrustedToRefined7'      
   description: 'Job resposible for process data from Trusted and send it to Refined'
   max_retries: 3
   glue_version: '3.0'

@@ -17,46 +17,118 @@ class DelloDatalakeGlueWorkflowsStack(Stack):
             **kwargs) -> None:
         super().__init__(scope, construct_id, **kwargs)
         
+        # WORKFLOWS
+        workflows_path = f'{os.getcwd()}/aws_data_engineering/glue/workflows/configs/'
+        for workflow_config_file in os.listdir(workflows_path):
+            
+            with open(workflows_path + workflow_config_file, 'r') as yaml_file:
+                glue_jobs_configs = stack_configuration._attribute_variables(yaml.safe_load(yaml_file))
+                
+            for workflow_name, triggers_config in glue_jobs_configs.items():
+                
+                glue.CfnWorkflow(self, workflow_name,
+                    name = workflow_name,
+                    description = triggers_config.pop('description', None)
+                )
+
+                for trigger_name, trigger_config in triggers_config.items():
+                    glue.CfnTrigger(self, trigger_config.get('id'),
+                        name = trigger_name,
+                        type = trigger_config.get('type'),
+                        schedule = trigger_config.get('schedule'),
+                        workflow_name = workflow_name,
+                        predicate = glue.CfnTrigger.PredicateProperty(
+                            conditions = [
+                                glue.CfnTrigger.ConditionProperty(
+                                    job_name = job_name,
+                                    logical_operator = 'EQUALS',
+                                    state = 'SUCCEEDED'
+                                )
+                                for job_name in trigger_config.get('dependencies', [])
+                            ],
+                            logical = 'AND'
+                        ),
+                        actions = [
+                            glue.CfnTrigger.ActionProperty(
+                                job_name = job_name
+                            )
+                            for job_name in trigger_config.get('initiates')
+                        ]
+                    )
         
-    #     self.aws_account_id = stack_configuration.aws_account_id
-    #     self.aws_region = stack_configuration.aws_region
-    #     self.deployment_key = stack_configuration.deployment_key
-    #            
-    #     # GLUE JOBS ROLE
-    #     self.glue_jobs_role = iam.Role(self, 'DelloDatalakeGlueJobsRole',
-    #         role_name = stack_configuration.glue_jobs_role_name,                           
-    #         assumed_by = iam.ServicePrincipal('glue.amazonaws.com'),
-    #         description = 'Role to be attached to Glue Jobs to read data from s3'
-    #     )
-    #     
-    #     self.glue_jobs_role.add_to_policy(iam.PolicyStatement(
-    #         effect = iam.Effect.ALLOW,
-    #         resources = [
-    #             f"arn:aws:s3:::{stack_configuration.raw_bucket_name}",
-    #             f"arn:aws:s3:::{stack_configuration.trusted_bucket_name}",
-    #             f"arn:aws:s3:::{stack_configuration.refined_bucket_name}"
-    #         ],
-    #         actions = ['s3:getObject', 's3:ListBucket', 's3:PutObject', 's3:DeleteObject']
-    #     ))
-    #     
-    #     self.glue_jobs_role.add_to_policy(iam.PolicyStatement(
-    #         effect = iam.Effect.ALLOW,
-    #         resources = [
-    #             f"arn:aws:s3:::{stack_configuration.utilities_bucket_name}"
-    #         ],
-    #         actions = ['s3:getObject', 's3:ListBucket']
-    #     ))
-    #     
-    #     
-    #     # GLUE JOBS
-    #     with open(f'{os.getcwd()}/aws_data_engineering/glue/jobs/configs/jobs_configs.yaml', 'r') as yaml_file:
-    #         glue_jobs_configs = self.__attribute_variables(yaml.safe_load(yaml_file))
-    #
-    #     for job_name, job_config in glue_jobs_configs.items():
-    #         
-    #         glue.CfnJob(self, 
-    #             name = job_name,
-    #             command = glue.CfnJob.JobCommandProperty(
-    #                 **job_config.pop('command')
-    #             ),
-    #             **job_config)
+        
+        
+        # job = glue.CfnJob(self, 'JobTest1',
+        #     name = 'test1', 
+        #     role='dello-datalake-dev-glue-jobs-role',
+        #     command = glue.CfnJob.JobCommandProperty(
+        #         python_version = '3',
+        #         name = 'glueetl',
+        #         script_location= 's3://location'
+        #     )
+        # )
+        # 
+        # job2 = glue.CfnJob(self, 'JobTest2',
+        #     name = 'test2', 
+        #     role='dello-datalake-dev-glue-jobs-role',
+        #     command = glue.CfnJob.JobCommandProperty(
+        #         python_version = '3',
+        #         name = 'glueetl',
+        #         script_location= 's3://location'
+        #     )
+        # )
+        # 
+        # glue.CfnJob(self, 'JobTest3',
+        #     name = 'test3', 
+        #     role='dello-datalake-dev-glue-jobs-role',
+        #     command = glue.CfnJob.JobCommandProperty(
+        #         python_version = '3',
+        #         name = 'glueetl',
+        #         script_location= 's3://location'
+        #     )
+        # )
+        # 
+        # glue.CfnWorkflow(self, 'WorkfowTest',
+        #     name='WorkfowTest'
+        # )
+        # 
+        # 
+        # glue.CfnTrigger(self, 'TriggerStart',
+        #     name='trigger_start',
+        #     type='ON_DEMAND',
+        #     workflow_name = 'WorkfowTest',
+        #     actions=[
+        #         glue.CfnTrigger.ActionProperty(
+        #             job_name='test1'
+        #         ),
+        #         glue.CfnTrigger.ActionProperty(
+        #             job_name='test2'
+        #         )
+        #     ]
+        # )
+        # 
+        # glue.CfnTrigger(self, 'Trigger2',
+        #     name='trigger2',
+        #     workflow_name = 'WorkfowTest',
+        #     type='CONDITIONAL',
+        #     actions=[
+        #         glue.CfnTrigger.ActionProperty(
+        #             job_name='test3'
+        #         )
+        #     ],
+        #     predicate=glue.CfnTrigger.PredicateProperty(
+        #         conditions=[
+        #             glue.CfnTrigger.ConditionProperty(
+        #                 job_name='test1',
+        #                 logical_operator='EQUALS',
+        #                 state='SUCCEEDED'
+        #             ),
+        #             glue.CfnTrigger.ConditionProperty(
+        #                 job_name='test2',
+        #                 logical_operator='EQUALS',
+        #                 state='SUCCEEDED'
+        #             )
+        #         ],
+        #         logical="AND"
+        #     )
+        # )
