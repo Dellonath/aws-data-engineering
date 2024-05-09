@@ -1,17 +1,17 @@
 
-dello-datalake-{deployment_key}-workflow-bu-a:
+dello-datalake-{deployment_key}-workflow-bu-b:
+  id: 'DelloDatalakeWorkflowB'
+  description: 'Process data for bu B'
 
-  description: 'Process data for bu A'
-  
   dello-datalake-{deployment_key}-start-trigger:
-    id: 'DelloDatalakeWorkflowAStartTrigger'
+    id: 'DelloDatalakeWorkflowBStartTrigger'
     type: 'ON_DEMAND'
     initiates: 
       - 'dello-datalake-{deployment_key}-trusted-to-refined-bu-a-1'
       - 'dello-datalake-{deployment_key}-trusted-to-refined-bu-a-2'
 
   dello-datalake-{deployment_key}-trigger-2:
-    id: 'DelloDatalakeWorkflowATrigger2'
+    id: 'DelloDatalakeWorkflowBTrigger2'
     type: 'CONDITIONAL'
     dependencies: 
       - 'dello-datalake-{deployment_key}-trusted-to-refined-bu-a-1'
@@ -20,7 +20,7 @@ dello-datalake-{deployment_key}-workflow-bu-a:
       - 'dello-datalake-{deployment_key}-trusted-to-refined-bu-a-3'
 
   dello-datalake-{deployment_key}-trigger-3:
-    id: 'DelloDatalakeWorkflowATrigger3'
+    id: 'DelloDatalakeWorkflowBTrigger3'
     type: 'CONDITIONAL'
     dependencies: 
       - 'dello-datalake-{deployment_key}-trusted-to-refined-bu-a-3'
@@ -30,7 +30,7 @@ dello-datalake-{deployment_key}-workflow-bu-a:
       - 'dello-datalake-{deployment_key}-trusted-to-refined-bu-a-6'
 
   dello-datalake-{deployment_key}-trigger-4:
-    id: 'DelloDatalakeWorkflowATrigger4'
+    id: 'DelloDatalakeWorkflowBTrigger4'
     type: 'CONDITIONAL'
     dependencies: 
       - 'dello-datalake-{deployment_key}-trusted-to-refined-bu-a-4'

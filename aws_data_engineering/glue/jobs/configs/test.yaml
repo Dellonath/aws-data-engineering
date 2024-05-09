@@ -1,0 +1,41 @@
+- business_unit: "300_bytes"
+  source_bucket: "fdr-staging-bucket-venus-dev" 
+  source_path: "ingestion/inbound/corp/RDW/300_bytes"
+  destination_bucket: "grs-datalake-dev-raw-820753656485-us-east-1"
+  data_source: "RDW"
+  destination_partition_flag: true
+
+- business_unit: "300_bytes"
+  source_bucket: "fdr-staging-bucket-venus-dev" 
+  source_path: "ingestion/inbound/corp/LNW/300_bytes"
+  destination_bucket: "grs-datalake-dev-raw-820753656485-us-east-1"
+  data_source: "LNW"
+  destination_partition_flag: true
+
+- business_unit: "300_bytes"
+  source_bucket: "fdr-staging-bucket-venus-dev" 
+  source_path: "ingestion/inbound/corp/OCG/300_bytes"
+  destination_bucket: "grs-datalake-dev-raw-820753656485-us-east-1"
+  data_source: "OCG"
+  destination_partition_flag: true
+
+- business_unit: "300_bytes"
+  source_bucket: "fdr-staging-bucket-venus-dev" 
+  source_path: "ingestion/inbound/corp/MNB/300_bytes"
+  destination_bucket: "grs-datalake-dev-raw-820753656485-us-east-1"
+  data_source: "MNB"
+  destination_partition_flag: true
+
+- business_unit: "300_bytes"
+  source_bucket: "fdr-staging-bucket-venus-dev" 
+  source_path: "ingestion/inbound/corp/SAF/300_bytes"
+  destination_bucket: "grs-datalake-dev-raw-820753656485-us-east-1"
+  data_source: "SAF"
+  destination_partition_flag: true
+
+- business_unit: "300_bytes"
+  source_bucket: "fdr-staging-bucket-venus-dev" 
+  source_path: "ingestion/inbound/corp/CM/300_bytes"
+  destination_bucket: "grs-datalake-dev-raw-820753656485-us-east-1"
+  data_source: "CM"
+  destination_partition_flag: true

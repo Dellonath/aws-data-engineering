@@ -22,11 +22,11 @@ class DelloDatalakeGlueWorkflowsStack(Stack):
         for workflow_config_file in os.listdir(workflows_path):
             
             with open(workflows_path + workflow_config_file, 'r') as yaml_file:
-                glue_jobs_configs = stack_configuration._attribute_variables(yaml.safe_load(yaml_file))
+                glue_workflows_configs = stack_configuration._attribute_variables(yaml.safe_load(yaml_file))
                 
-            for workflow_name, triggers_config in glue_jobs_configs.items():
+            for workflow_name, triggers_config in glue_workflows_configs.items():
                 
-                glue.CfnWorkflow(self, workflow_name,
+                glue.CfnWorkflow(self, triggers_config.pop('id'),
                     name = workflow_name,
                     description = triggers_config.pop('description', None),
                     max_concurrent_runs = triggers_config.pop('max_concurrent_runs', None),
@@ -56,82 +56,5 @@ class DelloDatalakeGlueWorkflowsStack(Stack):
                             )
                             for job_name in trigger_config.pop('initiates')
                         ],
-                        type = trigger_config.get('tags')
+                        tags = trigger_config.get('tags')
                     )
-        
-        
-        
-        # job = glue.CfnJob(self, 'JobTest1',
-        #     name = 'test1', 
-        #     role='dello-datalake-dev-glue-jobs-role',
-        #     command = glue.CfnJob.JobCommandProperty(
-        #         python_version = '3',
-        #         name = 'glueetl',
-        #         script_location= 's3://location'
-        #     )
-        # )
-        # 
-        # job2 = glue.CfnJob(self, 'JobTest2',
-        #     name = 'test2', 
-        #     role='dello-datalake-dev-glue-jobs-role',
-        #     command = glue.CfnJob.JobCommandProperty(
-        #         python_version = '3',
-        #         name = 'glueetl',
-        #         script_location= 's3://location'
-        #     )
-        # )
-        # 
-        # glue.CfnJob(self, 'JobTest3',
-        #     name = 'test3', 
-        #     role='dello-datalake-dev-glue-jobs-role',
-        #     command = glue.CfnJob.JobCommandProperty(
-        #         python_version = '3',
-        #         name = 'glueetl',
-        #         script_location= 's3://location'
-        #     )
-        # )
-        # 
-        # glue.CfnWorkflow(self, 'WorkfowTest',
-        #     name='WorkfowTest'
-        # )
-        # 
-        # 
-        # glue.CfnTrigger(self, 'TriggerStart',
-        #     name='trigger_start',
-        #     type='ON_DEMAND',
-        #     workflow_name = 'WorkfowTest',
-        #     actions=[
-        #         glue.CfnTrigger.ActionProperty(
-        #             job_name='test1'
-        #         ),
-        #         glue.CfnTrigger.ActionProperty(
-        #             job_name='test2'
-        #         )
-        #     ]
-        # )
-        # 
-        # glue.CfnTrigger(self, 'Trigger2',
-        #     name='trigger2',
-        #     workflow_name = 'WorkfowTest',
-        #     type='CONDITIONAL',
-        #     actions=[
-        #         glue.CfnTrigger.ActionProperty(
-        #             job_name='test3'
-        #         )
-        #     ],
-        #     predicate=glue.CfnTrigger.PredicateProperty(
-        #         conditions=[
-        #             glue.CfnTrigger.ConditionProperty(
-        #                 job_name='test1',
-        #                 logical_operator='EQUALS',
-        #                 state='SUCCEEDED'
-        #             ),
-        #             glue.CfnTrigger.ConditionProperty(
-        #                 job_name='test2',
-        #                 logical_operator='EQUALS',
-        #                 state='SUCCEEDED'
-        #             )
-        #         ],
-        #         logical="AND"
-        #     )
-        # )

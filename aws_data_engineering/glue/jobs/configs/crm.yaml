@@ -1,5 +1,5 @@
-dello-datalake-{deployment_key}-raw-to-trusted-job-bu-b:
-  id: 'DelloDatalakeGlueJobRawToTrustedBuB'      
+dello-datalake-{deployment_key}-raw-to-trusted-crm:
+  id: 'DelloDatalakeGlueJobRawToTrusted1'      
   description: 'Job resposible for process data from Raw and send it to Trusted'
   max_retries: 3
   glue_version: '3.0'
@@ -8,19 +8,25 @@ dello-datalake-{deployment_key}-raw-to-trusted-job-bu-b:
   command:
     name: 'glueetl'
     python_version: '3'
-    script_location: 's3://dello-datalake-{deployment_key}-utilities-{aws_account_id}-{aws_region}/glue/jobs/scripts/bu_b/raw-to-trusted.py'
+    script_location: 's3://dello-datalake-{deployment_key}-utilities-{aws_account_id}-{aws_region}/glue/jobs/scripts/raw-to-trusted-common.py'
+  default_arguments:
+    --RAW_PATH: 's3://dello-datalake-{deployment_key}-raw-{aws_account_id}-{aws_region}/crm/clients'
+    --TRUSTED_PATH: 's3://dello-datalake-{deployment_key}-trusted-{aws_account_id}-{aws_region}/crm/clients'
+    --RAW_TYPE: 'csv'
+    --FULL_LOAD: False
   tags:
     owner: 'dellonath@gmail.com'
     company: 'dellotech consulting'
     project: 'aws-data-engineering'
+    business_unit: 'crm'
     deployment_key: '{deployment_key}'
 
-dello-datalake-{deployment_key}-trusted-to-refined-job-bu-b:
-  id: 'DelloDatalakeGlueJobTrustedToRefinedBuB'      
+dello-datalake-{deployment_key}-trusted-to-refined-crm:
+  id: 'DelloDatalakeGlueJobTrustedToRefined2'      
   description: 'Job resposible for process data from Trusted and send it to Refined'
   max_retries: 3
   glue_version: '3.0'
-  role: 'dello-datalake-{deployment_key}-glue-jobs-role' 
+  role: 'dello-datalake-{deployment_key}-glue-jobs-role'
   max_capacity: 1
   command:
     name: 'glueetl'
@@ -30,4 +36,5 @@ dello-datalake-{deployment_key}-trusted-to-refined-job-bu-b:
     owner: 'dellonath@gmail.com'
     company: 'dellotech consulting'
     project: 'aws-data-engineering'
+    business_unit: 'crm'
     deployment_key: '{deployment_key}'
